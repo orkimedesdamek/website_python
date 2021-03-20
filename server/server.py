@@ -14,17 +14,6 @@ except:
 
 db = client.website_data
 text_add = db.text
-#text_list = db.text.find()
-
-
-#@app.route("/")
-#def hello():
-#    return "Flask inside Docker!!"
-#    return "Cool stuff"
-
-#@app.route("/")
-#def home():
-#    return render_template('index.html')
 
 @app.route("/action", methods=['POST'])
 def action ():
@@ -45,4 +34,3 @@ def db_list():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 1234))
     app.run(debug=True,host='0.0.0.0',port=port)
-
