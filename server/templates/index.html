@@ -1,0 +1,51 @@
+<!Doctype Html>
+<Html>
+<Head>
+<Title>
+ Compose App
+</Title>
+</Head>
+<Body>
+ Type here some text, it will be added to DB!
+
+<style>
+ input[type=text]{
+    width:100%;
+    border:2px solid #aaa;
+    border-radius:4px;
+    margin:8px 0;
+    outline:none;
+    padding:8px;
+    box-sizing:border-box;
+    transition:.3s;
+ }
+  
+ input[type=text]:focus{
+    border-color:dodgerBlue;
+    box-shadow:0 0 8px 0 dodgerBlue;
+ }
+ button[type=submit]{
+    width:100px;
+    border:2px solid #aaa;
+    border-radius:4px;
+    margin:8px 0;
+    outline:none;
+    padding:8px;
+    box-sizing:border-box;
+    transition:.3s;
+ }
+ button[type=submit]:hover{
+    box-shadow:0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+ }
+</style>
+<form action="/action" method="POST">
+ <input type="text" name="textdata" placeholder="Type here smth!">
+ <button type="submit">Do smth!</button>
+</form>
+
+<a href=db_list>
+ <button type="submit">Check DB Contents</button>
+</a>
+
+</Body>
+</Html>

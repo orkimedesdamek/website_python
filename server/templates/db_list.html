@@ -1,0 +1,42 @@
+<!Doctype Html>
+<Html>
+<Head>
+<Title>
+ db contents
+</Title>
+</Head>
+<Body>
+
+<style>
+
+ button[type=submit]{
+    width:100px;
+    border:2px solid #aaa;
+    border-radius:4px;
+    margin:8px 0;
+    outline:none;
+    padding:8px;
+    box-sizing:border-box;
+    transition:.3s;
+ }
+ button[type=submit]:hover{
+    box-shadow:0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+ }
+</style>
+
+<a href=/>
+ <button type="submit">Home</button>
+</a>
+
+<h2>DB Status</h2>
+
+<h1>{{ db_status_html }}</h1>
+<h2>DB Contents</h2>
+
+ {% for task_id in tasks %}
+  <h1>{{task_id}}</h1>
+ {% endfor %}
+</Body>
+</Html>
+
+

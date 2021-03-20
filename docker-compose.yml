@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+
+  db:
+ 
+    image: website_flask_mongo:v1
+    container_name: website_mongo
+    build: db/
+    volumes:
+      - mongo_dbase:/data/db
+      - config_mongo_dbase:/data/configdb
+    ports: 
+      - 27017:27017
+    networks:
+      - backend
+  server:
+ 
+    image: website_python_server:v1 
+    container_name: website_flask_server
+    build: server/
+    ports:
+      - 1234:1234
+    depends_on:
+      - db
+    links:
+      - db
+    networks:
+      - frontend
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  mongo_dbase:
+   driver: local
+  config_mongo_dbase:
+   driver: local
