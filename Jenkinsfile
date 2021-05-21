@@ -12,7 +12,7 @@ pipeline {
                 sh 'docker-compose down --rmi all'
             }
         }
-        stage('Compose image & container biuld') {
+        stage('Compose image & container build') {
             steps {
                 sh 'docker-compose up --no-start'
             }

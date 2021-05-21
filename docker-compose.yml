@@ -4,7 +4,7 @@ services:
 
   db:
  
-    image: website_flask_mongo:v1
+    image: "website_mongo:${TAG}"
     container_name: website_mongo
     build: db/
     volumes:
@@ -16,7 +16,7 @@ services:
       - backend
   server:
  
-    image: website_python_server:v1 
+    image: "website_server:${TAG}" 
     container_name: website_flask_server
     build: server/
     ports:
