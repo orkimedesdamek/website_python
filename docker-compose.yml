@@ -4,8 +4,8 @@ services:
 
   db:
  
-    image: "website_mongo:${TAG}"
-    container_name: "website_mongo_${TAG}"
+    image: "website_flask_mongo:${TAG}"
+    container_name: "website_mongo"
     build: db/
     volumes:
       - mongo_dbase:/data/db
@@ -16,8 +16,8 @@ services:
       - backend
   server:
  
-    image: "website_server:${TAG}" 
-    container_name: "website_server_${TAG}"
+    image: "website_flask_server:${TAG}" 
+    container_name: "website_server"
     build: server/
     ports:
       - 1234:1234

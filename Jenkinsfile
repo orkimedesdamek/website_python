@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Tests'){
             steps {
-            sh '/usr/local/bin/dockle website_mongo:v1 | tee -a ./reports/dockle_report.txt' // Dockle test
+            sh '/usr/local/bin/dockle website_flask_mongo:v1 | tee -a ./reports/dockle_report.txt' // Dockle test
             }
         }
         stage ('Container start') {
