@@ -3,14 +3,14 @@ from flask import Flask, render_template, request, redirect
 import os
 import pymongo
 from pymongo import MongoClient
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
-load_dotenv()
+#load_dotenv()
 
 app = Flask(__name__)
 
-TAG = os.getenv('TAG')
-container_name = website_mongo_TAG
+#TAG = os.getenv('TAG')
+#container_name = website_mongo_TAG
 
 try:
  client = MongoClient('website_mongo',27017)
