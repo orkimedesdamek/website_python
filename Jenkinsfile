@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-                sh 'BUILD=$(({BUILD_NUMBER}-1)) docker-compose down --rmi all'
+                sh 'BUILD=((${BUILD_NUMBER}-1)) docker-compose down --rmi all'
             }
         }
         stage('Compose image & container build') {
