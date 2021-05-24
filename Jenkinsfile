@@ -20,8 +20,8 @@ pipeline {
         stage('Tests'){
             steps {
            // sh 'ls -l'
-            sh '/usr/local/bin/dockle website_flask_server:v1 | tee -a ./reports/dockle_report.txt' // Dockle test
-            archiveArtifacts artifacts: 'reports/*.txt' //Archiving build artifacts
+                sh '/usr/local/bin/dockle website_flask_server:v1 | tee -a ./reports/dockle_report.txt' // Dockle test
+                archiveArtifacts artifacts: 'reports/*.txt' //Archiving build artifacts
 
                 publishHTML (target: [ 
                     allowMissing: false,

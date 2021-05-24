@@ -32,8 +32,10 @@ services:
 networks:
   frontend:
     driver: bridge
+    name: frontend
   backend:
     driver: bridge
+    name: backend
 
 volumes:
   mongo_dbase:
