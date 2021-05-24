@@ -15,7 +15,8 @@ pipeline {
         stage('Compose image & container build') {
             steps {
                 sh 'export BUILD=${BUILD_NUMBER}'
-                sh 'docker-compose up --no-start'
+                sh 'echo $BUILD'
+                sh 'docker-compose up  --no-start'
             }
         }
         stage('Tests'){
