@@ -9,7 +9,6 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-            //    sh 'OLD_BUILD=$((BUILD_NUMBER-1))'
                 sh 'BUILD=$((BUILD_NUMBER-1)) docker-compose down --rmi all'
             }
         }
@@ -20,7 +19,6 @@ pipeline {
         }
         stage('Tests'){
             steps {
-           // sh 'ls -l'
                 sh '/usr/local/bin/dockle website_flask_server:v1 | tee -a ./reports/dockle_report.txt' // Dockle test
                 archiveArtifacts artifacts: 'reports/*.txt' //Archiving build artifacts
 
