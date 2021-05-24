@@ -4,7 +4,7 @@ services:
 
   db:
  
-    image: "website_flask_mongo:${TAG}"
+    image: "website_flask_mongo:${TAG}-B${BUILD}"
     container_name: "website_mongo"
     build: db/
     volumes:
