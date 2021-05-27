@@ -26,6 +26,15 @@ pipeline {
             steps {
                 sh '/usr/local/bin/dockle website_flask_server:${TAG}-B${BUILD_NUMBER} | tee -a ./reports/dockle_report.txt' // Dockle test
                 sh '/usr/local/bin/dockle website_flask_mongo:${TAG}-B${BUILD_NUMBER} | tee -a ./reports/dockle_report.txt'
+
+                sh '/usr/local/bin/trivy website_flask_server:${TAG}-B${BUILD_NUMBER} | tee -a ./reports/trivy_report.txt' // Trivy test
+                sh '/usr/local/bin/trivy website_flask_mongo:${TAG}-B${BUILD_NUMBER} | tee -a ./reports/trivy_report.txt'
+
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
+                    sh '/usr/bin/hadolint ./server/Dockerfile | tee -a ./reports/hadolint_report.txt' // Hadolint test
+                    sh '/usr/bin/hadolint ./db/Dockerfile | tee -a ./reports/hadolint_report.txt'
+                }
+                    
                 archiveArtifacts artifacts: 'reports/*.txt' //Archiving build artifacts
 
                 publishHTML (target: [ 
