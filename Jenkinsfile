@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        TAG = 'v1'
+
+    }
+
     stages {
         stage('Clone repository') {
             steps {
@@ -19,7 +24,8 @@ pipeline {
         }
         stage('Tests'){
             steps {
-                sh '/usr/local/bin/dockle website_flask_server:v1 | tee -a ./reports/dockle_report.txt' // Dockle test
+                sh '/usr/local/bin/dockle website_flask_server:${TAG}-B${BUILD_NUMBER} | tee -a ./reports/dockle_report.txt' // Dockle test
+                sh '/usr/local/bin/dockle website_flask_mongo:${TAG}-B${BUILD_NUMBER} | tee -a ./reports/dockle_report.txt'
                 archiveArtifacts artifacts: 'reports/*.txt' //Archiving build artifacts
 
                 publishHTML (target: [ 
