@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect
 import os
 import pymongo
 from pymongo import MongoClient
+from bson import json_util
 #from dotenv import load_dotenv
 
 #load_dotenv()
@@ -36,7 +37,7 @@ def index():
 def db_list():
     text_print = request.args.get('text')
     text_list = db.text.find({
-        'Text': text_print
+        'text': text_print
     })
     return render_template('db_list.html',text2html=text_list,db_status_html=db_status)
 
