@@ -37,7 +37,7 @@ def index():
 def db_list():
     text_print = request.args.get('text')
     text_list = db.text.find({
-        'text': text_print
+        'Text': text_print
     })
     return render_template('db_list.html',text2html=text_list,db_status_html=db_status)
 
