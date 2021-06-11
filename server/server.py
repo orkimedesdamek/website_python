@@ -34,10 +34,10 @@ def index():
     return render_template('index.html')
 
 @app.route('/db_list')
-def db_list(text_print):
+def db_list(text):
     #text_print = request.args.get('text')
     text_list = db.text.find({
-        'text': text_print
+        'text': text
     })
     return render_template('db_list.html',text2html=text_list,db_status_html=db_status)
 
