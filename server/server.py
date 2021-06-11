@@ -35,7 +35,7 @@ def index():
 @app.route('/db_list')
 def db_list():
     text_list = db.text.find()
-    return render_template('db_list.html',tasks=text_list,db_status_html=db_status)
+    return render_template('db_list.html',text2html=text_list,db_status_html=db_status)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 1234))
