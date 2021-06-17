@@ -46,7 +46,7 @@
    <div style="overflow-x: auto;">
       <table>
             {% for item_id in text2html %}
-            <tr><td><h3>{{item_id}}</h3></td></tr>
+            <tr><td><h3>{{item_id['text']}}</h3></td></tr>
             {% endfor %}
       </table>
    </div>
