@@ -2,8 +2,9 @@
 from flask import Flask, render_template, request, redirect
 import os
 import pymongo
+from bson import ObjectId
 from pymongo import MongoClient
-#from bson import json_util
+
 #from dotenv import load_dotenv
 
 #load_dotenv()
@@ -35,8 +36,8 @@ def index():
 
 @app.route('/db_list')
 def db_list():
-    #text = request.args.get('text')
-    text_list = db.text.find()
+    content = request.args.get('text')
+    text_list = db.text.find({'text':ObjectId(content)})
     return render_template('db_list.html',text2html=text_list,db_status_html=db_status)
 
 if __name__ == "__main__":
