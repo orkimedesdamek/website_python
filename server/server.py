@@ -24,17 +24,19 @@ text_add = db.text
 
 @app.route("/action", methods=['POST'])
 def action ():
-        #Adding a Text
-        textdata = request.values.get("textdata")
-        text_add.insert({ "text":textdata})
-        return redirect("/")
+    #Adding a Text
+    textdata = request.values.get("textdata")
+    text_add.insert({ "text":textdata})
+    return redirect("/")
 
 @app.route('/')
+#Render index
 def index():
     return render_template('index.html')
 
 @app.route('/db_list')
 def db_list():
+    #List db contents
     text_list = db.text.find()
     return render_template('db_list.html',text2html=text_list,db_status_html=db_status)
 
