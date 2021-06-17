@@ -1,8 +1,6 @@
 FROM python:slim
 COPY . /app
 WORKDIR /app
-RUN pip install bson
-RUN pip install pymongo
-RUN pip install flask
+RUN pip install -r requirements.txt
 ENTRYPOINT ["python"]
 CMD ["server.py"]
