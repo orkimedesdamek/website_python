@@ -36,7 +36,7 @@ def index():
 
 @app.route('/db_list')
 def db_list():
-    content = request.args.get('text')
+ #   content = request.args.get('text')
     text_list = db.text.find()
     return render_template('db_list.html',text2html=text_list,db_status_html=db_status)
 
