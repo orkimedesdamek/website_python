@@ -13,6 +13,7 @@ pipeline {
             }
             steps {
                 sh 'ls -l'
+                sh 'echo $BRANCH_NAME'
             }
         }
         stage('Clone repository') {
