@@ -23,12 +23,12 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-                sh 'BUILD=$((BUILD_NUMBER-1)) docker-compose down --rmi all'
+                sh 'BUILD=${BRANCH_NAME}_B$((BUILD_NUMBER-1)) docker-compose down --rmi all'
             }
         }
         stage('Compose image & container build') {
             steps {
-                sh 'BUILD=${BRANCH_NAME}_${BUILD_NUMBER} docker-compose up  --no-start'
+                sh 'BUILD=${BRANCH_NAME}_B${BUILD_NUMBER} docker-compose up  --no-start'
             }
         }
  //       stage('Tests'){
