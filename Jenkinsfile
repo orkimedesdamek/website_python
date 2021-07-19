@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage ('Develop test') {
             when {
-                branch 'master'
+                branch 'develop'
             }
             steps {
                 sh 'ls -l'
