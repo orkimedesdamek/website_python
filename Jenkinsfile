@@ -29,12 +29,12 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-                sh "TAG=${TAG} BUILD=${PREV_BUILD} docker-compose down --rmi all"
+                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} TAG=${TAG} BUILD=${PREV_BUILD} docker-compose down --rmi all"
             }
         }
         stage('Compose image & container build') {
             steps {
-                sh "TAG=${TAG} BUILD=${BUILD} docker-compose up  --no-start"
+                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose up  --no-start"
             }
         }
         stage('Tests'){
