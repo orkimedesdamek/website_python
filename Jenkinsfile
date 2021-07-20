@@ -5,6 +5,7 @@ pipeline {
         TAG = 'v1.01'
         BUILD = '${BRANCH_NAME}_B${BUILD_NUMBER}'
         PREV_BUILD = '${BRANCH_NAME}_B$((BUILD_NUMBER-1))'
+        COMPOSE_PROJECT_NAME = 'flask_website'
 
     }
 
@@ -18,6 +19,7 @@ pipeline {
                 sh 'echo $TAG'
                 sh "echo ${BUILD}"
                 sh "echo ${PREV_BUILD}"
+                sh "echo ${COMPOSE_PROJECT_NAME}"
             }
         }
         stage('Clone repository') {
