@@ -10,18 +10,18 @@ pipeline {
     }
 
     stages {
-        stage ('Develop test') {
-            when {
-                branch 'develop'
-            }
-            steps {
-                sh 'echo $BRANCH_NAME'
-                sh 'echo $TAG'
-                sh "echo ${BUILD}"
-                sh "echo ${PREV_BUILD}"
-                sh "echo ${COMPOSE_PROJECT_NAME}"
-            }
-        }
+//        stage ('Develop test') {
+//            when {
+//                branch 'develop'
+//            }
+//            steps {
+//                sh 'echo $BRANCH_NAME'
+//                sh 'echo $TAG'
+//                sh "echo ${BUILD}"
+//                sh "echo ${PREV_BUILD}"
+//                sh "echo ${COMPOSE_PROJECT_NAME}"
+//            }
+//        }
         stage('Clone repository') {
             steps {
                 checkout scm
