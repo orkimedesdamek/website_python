@@ -14,6 +14,7 @@ pipeline {
             }
             steps {
                 sh 'echo $BRANCH_NAME'
+                sh 'echo $TAG'
                 sh 'echo $BUILD'
             }
         }
@@ -29,7 +30,7 @@ pipeline {
         }
         stage('Compose image & container build') {
             steps {
-                sh 'BUILD=${BRANCH_NAME}_B${BUILD_NUMBER} docker-compose up  --no-start'
+                sh 'docker-compose up  --no-start'
             }
         }
         stage('Tests'){
