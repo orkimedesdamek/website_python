@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TAG = 'v1'
+        TAG = 'v1.01'
         BUILD = '${BRANCH_NAME}_B${BUILD_NUMBER}'
         PREV_BUILD = '${BRANCH_NAME}_B$((BUILD_NUMBER-1))'
 
@@ -27,12 +27,12 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-                sh "${PREV_BUILD} docker-compose down --rmi all"
+                sh "TAG=${TAG} BUILD=${PREV_BUILD} docker-compose down --rmi all"
             }
         }
         stage('Compose image & container build') {
             steps {
-                sh "${BUILD} docker-compose up  --no-start"
+                sh "TAG=${TAG} BUILD=${BUILD} docker-compose up  --no-start"
             }
         }
         stage('Tests'){
