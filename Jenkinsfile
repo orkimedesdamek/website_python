@@ -17,7 +17,6 @@ pipeline {
                 sh 'echo $BRANCH_NAME'
                 sh 'echo $TAG'
                 sh "echo \"$BUILD\""
-                sh "echo \"$PREV_BUILD\""
             }
         }
         stage('Clone repository') {
@@ -27,12 +26,12 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-                sh "\"BUILD=$PREV_BUILD\" docker-compose down --rmi all"
+                sh "BUILD=${PREV_BUILD} docker-compose down --rmi all"
             }
         }
         stage('Compose image & container build') {
             steps {
-                sh "\"BUILD=$BUILD\" docker-compose up  --no-start"
+                sh "BUILD=${BUILD} docker-compose up  --no-start"
             }
         }
         stage('Tests'){
