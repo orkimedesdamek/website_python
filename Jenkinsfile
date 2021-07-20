@@ -15,7 +15,7 @@ pipeline {
             steps {
                 sh 'echo $BRANCH_NAME'
                 sh 'echo $TAG'
-                sh 'echo $BUILD'
+                sh 'echo "$BUILD"'
             }
         }
         stage('Clone repository') {
