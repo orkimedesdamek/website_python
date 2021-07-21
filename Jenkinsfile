@@ -65,7 +65,6 @@ pipeline {
                 ]
                 )
             }
-        }
         stage ('Container start') {
             steps {
                 sh 'docker-compose start'
