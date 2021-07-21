@@ -39,7 +39,7 @@ pipeline {
         }
         stage('Tests'){
             when {
-                anyOf { branch pattern "release_\d+\.+\d+"; branch 'master' }
+                anyOf { branch pattern "release_\\d+\\.+\\d+"; branch 'master' }
             }
             steps {
                 sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/dockle website_flask_server:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt" // Dockle test
