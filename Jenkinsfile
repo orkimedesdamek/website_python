@@ -45,8 +45,8 @@ pipeline {
                 sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/dockle website_flask_server:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt" // Dockle test
                 sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/dockle website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt"
 
-                sh "TAG=${TAG} BUILD=${BUILD}/usr/local/bin/trivy website_flask_server:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt" // Trivy test
-                sh "TAG=${TAG} BUILD=${BUILD}/usr/local/bin/trivy website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt"
+                sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/trivy website_flask_server:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt" // Trivy test
+                sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/trivy website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt"
 
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
                     sh '/usr/bin/hadolint ./server/Dockerfile | tee -a ./reports/hadolint_report.txt' // Hadolint test
