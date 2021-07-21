@@ -4,6 +4,5 @@ Uses Docker-Compose to set up services.
 Git workflow is Gitflow.
 
 Version v1.01 20.07.2021
--Switched to gitflow workflow
--Minor changes
--
+* Switched to gitflow workflow
+* Minor changes
