@@ -51,7 +51,7 @@ pipeline {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
                     sh '/usr/bin/hadolint ./server/Dockerfile | tee -a ./reports/hadolint_report.txt' // Hadolint test
                     sh '/usr/bin/hadolint ./db/Dockerfile | tee -a ./reports/hadolint_report.txt'
-                    
+                }
                 archiveArtifacts artifacts: 'reports/*.txt' //Archiving build artifacts
 
                 publishHTML (target: [ 
@@ -63,8 +63,9 @@ pipeline {
                     reportName: 'Test reports',
                 ]
                 )
-                }
+                
             }
+        }
         stage ('Container start') {
             steps {
                 sh 'docker-compose start'
