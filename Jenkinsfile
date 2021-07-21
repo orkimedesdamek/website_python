@@ -38,7 +38,9 @@ pipeline {
             }
         }
         stage('Tests'){
-            when { anyOf { branch pattern "release_\\d+\\.+\\d+", comparator: "REGEXP"; branch 'master' }}
+            when { 
+                anyOf { branch "release_*"; branch 'master' }
+                }
             steps {
                 sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/dockle website_flask_server:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt" // Dockle test
                 sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/dockle website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt"
