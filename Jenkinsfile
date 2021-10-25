@@ -29,9 +29,9 @@ pipeline {
         }
         stage('Pylint test') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
+                //catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
                 sh "pylint  ./server/server.py | tee -a ./reports/pylint_report.txt" //Pylint test
-                }
+                //}
             }
         }
         stage('Remove old containers, networks, images etc.') {
@@ -59,17 +59,17 @@ pipeline {
                     sh '/usr/bin/hadolint ./server/Dockerfile | tee -a ./reports/hadolint_report.txt' // Hadolint test
                     sh '/usr/bin/hadolint ./db/Dockerfile | tee -a ./reports/hadolint_report.txt'
                 }
-                archiveArtifacts artifacts: 'reports/*.txt' //Archiving build artifacts
+                //archiveArtifacts artifacts: 'reports/*.txt' //Archiving build artifacts
 
-                publishHTML (target: [ 
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: false,
-                    keepAll: true,
-                    reportDir: 'reports',
-                    reportFiles: 'hadolint_report.txt,dockle_report.txt,trivy_report.txt,pylint_report.txt',
-                    reportName: 'Test reports',
-                ]
-                )
+                //publishHTML (target: [ 
+                //    allowMissing: false,
+                //    alwaysLinkToLastBuild: false,
+                //    keepAll: true,
+                //    reportDir: 'reports',
+                //    reportFiles: 'hadolint_report.txt,dockle_report.txt,trivy_report.txt,pylint_report.txt',
+                //    reportName: 'Test reports',
+                //]
+                //)
                 
             }
         }
