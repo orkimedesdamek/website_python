@@ -30,7 +30,7 @@ pipeline {
         stage('Pylint test') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
-                sh "pylint  ./server/server.py" //Pylint test
+                sh "pylint  ./server/server.py | tee -a ./reports/pylint_report.txt" //Pylint test
                 }
             }
         }
