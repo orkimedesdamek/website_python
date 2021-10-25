@@ -29,7 +29,9 @@ pipeline {
         }
         stage('Pylint test') {
             steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
                 sh "pylint  ./server/server.py" //Pylint test
+                }
             }
         }
         stage('Remove old containers, networks, images etc.') {
