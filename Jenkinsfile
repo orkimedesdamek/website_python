@@ -27,6 +27,11 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Pylint test') {
+            steps {
+                sh "pylint  ./server/server.py" //Pylint test
+            }
+        }
         stage('Remove old containers, networks, images etc.') {
             steps {
                 sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} TAG=${TAG} BUILD=${PREV_BUILD} docker-compose down --rmi all"
@@ -59,7 +64,7 @@ pipeline {
                     alwaysLinkToLastBuild: false,
                     keepAll: true,
                     reportDir: 'reports',
-                    reportFiles: 'hadolint_report.txt,dockle_report.txt,trivy_report.txt',
+                    reportFiles: 'hadolint_report.txt,dockle_report.txt,trivy_report.txt,pylint_report.txt',
                     reportName: 'Test reports',
                 ]
                 )
