@@ -73,6 +73,21 @@ pipeline {
                 
             }
         }
+        stage ('Archive Reports') {
+            steps {
+                archiveArtifacts artifacts: 'reports/*.txt' //Archiving build artifacts
+
+                publishHTML (target: [ 
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: 'reports',
+                    reportFiles: 'hadolint_report.txt,dockle_report.txt,trivy_report.txt,pylint_report.txt',
+                    reportName: 'Test reports',
+                ]
+                )
+            }
+        }
         stage ('Container start') {
             steps {
                 sh 'docker-compose start'
