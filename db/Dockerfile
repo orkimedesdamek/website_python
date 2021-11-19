@@ -1,3 +1,4 @@
 FROM mongo:4.4.6
-RUN groupadd -r db && useradd -r -g db
+RUN groupadd -r db
+RUN useradd -r -g db
 USER db
