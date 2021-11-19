@@ -1,3 +1,5 @@
 FROM mongo:4.4.6
-#RUN groupadd -r web && useradd -r web -g web
-#USER web
+RUN groupadd -r mongo && useradd -r mongo -g mongo
+USER mongo
+HEALTHCHECK NONE
+CMD ["mongod"]
