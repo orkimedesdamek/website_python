@@ -1,3 +1,3 @@
 FROM mongo:4.4.6
-RUN groupadd -r db && useradd -r db -g db
-USER db
+RUN groupadd -r web && useradd -r web -g web
+USER web
