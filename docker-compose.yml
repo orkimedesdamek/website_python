@@ -7,6 +7,7 @@ services:
     image: "website_flask_mongo:${TAG}-${BUILD}"
     container_name: "website_mongo"
     build: db/
+    user: mongo:mongo
     volumes:
       - mongo_dbase:/data/db
       - config_mongo_dbase:/data/configdb
