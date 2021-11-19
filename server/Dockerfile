@@ -1,5 +1,5 @@
 FROM python:alpine
-RUN groupadd -r web && useradd -r -g web web
+RUN addgroup -S web && adduser -S web -G web
 COPY . /app
 WORKDIR /app
 RUN pip install -r requirements.txt
