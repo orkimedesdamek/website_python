@@ -46,7 +46,7 @@ pipeline {
         }
         stage('Tests'){
             when { 
-                anyOf { branch "release_*"; branch 'master' }
+                anyOf { branch "release_*"; branch 'feature_*' }
                 }
             steps {
                 sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/dockle website_flask_server:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt" // Dockle test
