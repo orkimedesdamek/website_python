@@ -6,6 +6,7 @@ pipeline {
         BUILD = '${BRANCH_NAME}_B${BUILD_NUMBER}'
         PREV_BUILD = '${BRANCH_NAME}_B$((BUILD_NUMBER-1))'
         COMPOSE_PROJECT_NAME = 'flask_website'
+        DOCKER_CONTENT_TRUST = 1
 
     }
 
