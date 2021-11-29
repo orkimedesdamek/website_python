@@ -8,19 +8,19 @@ from pymongo import MongoClient
 
 #load_dotenv()
 
-app = Flask(__name__)
+APP = Flask(__name__)
 
 #TAG = os.getenv('TAG')
 #container_name = website_mongo_TAG
 
 try:
-    client = MongoClient('website_mongo', 27017)
-    db_status = 'Connected to DB!'
+    CLIENT = MongoClient('website_mongo', 27017)
+    DB_STATUS = 'Connected to DB!'
 except:
-    db_status = 'Failed to connect'
+    DB_STATUS = 'Failed to connect'
 
-db = client.website_data
-text_add = db.text
+DB = CLIENT.website_data
+TEXT_ADD = DB.text
 
 @app.route("/action", methods=['POST'])
 def action():
@@ -38,8 +38,8 @@ def index():
 def db_list():
     #List db contents
     text_list = db.text.find()
-    return render_template('db_list.html', text2html=text_list, db_status_html=db_status)
+    return render_template('db_list.html', text2html=text_list, DB_STATUS_HTML=DB_STATUS)
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 1234))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    PORT = int(os.environ.get("PORT", 1234))
+    app.run(debug=True, host='0.0.0.0', port=PORT)
