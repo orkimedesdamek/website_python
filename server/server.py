@@ -37,7 +37,7 @@ def index():
 @APP.route('/db_list')
 def db_list():
     #List db contents
-    text_list = db.text.find()
+    text_list = DB.text.find()
     return render_template('db_list.html', text2html=text_list, DB_STATUS_HTML=DB_STATUS)
 
 if __name__ == "__main__":
