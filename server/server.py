@@ -26,7 +26,7 @@ TEXT_ADD = DB.text
 def action():
     #Adding a Text
     textdata = request.values.get("textdata")
-    text_add.insert({"text":textdata})
+    TEXT_ADD.insert({"text":textdata})
     return redirect("/")
 
 @APP.route('/')
