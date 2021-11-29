@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template, request, redirect
 import os
+from flask import Flask, render_template, request, redirect
 import pymongo
 from pymongo import MongoClient
 
@@ -14,19 +14,19 @@ app = Flask(__name__)
 #container_name = website_mongo_TAG
 
 try:
- client = MongoClient('website_mongo',27017)
- db_status = 'Connected to DB!'
+    client = MongoClient('website_mongo', 27017)
+    db_status = 'Connected to DB!'
 except:
- db_status = 'Failed to connect'
+    db_status = 'Failed to connect'
 
 db = client.website_data
 text_add = db.text
 
 @app.route("/action", methods=['POST'])
-def action ():
+def action():
     #Adding a Text
     textdata = request.values.get("textdata")
-    text_add.insert({ "text":textdata})
+    text_add.insert({"text":textdata})
     return redirect("/")
 
 @app.route('/')
@@ -38,8 +38,8 @@ def index():
 def db_list():
     #List db contents
     text_list = db.text.find()
-    return render_template('db_list.html',text2html=text_list,db_status_html=db_status)
+    return render_template('db_list.html', text2html=text_list, db_status_html=db_status)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 1234))
-    app.run(debug=True,host='0.0.0.0',port=port)
+    app.run(debug=True, host='0.0.0.0', port=port)
