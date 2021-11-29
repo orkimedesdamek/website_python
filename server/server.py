@@ -22,19 +22,19 @@ except:
 DB = CLIENT.website_data
 TEXT_ADD = DB.text
 
-@app.route("/action", methods=['POST'])
+@APP.route("/action", methods=['POST'])
 def action():
     #Adding a Text
     textdata = request.values.get("textdata")
     text_add.insert({"text":textdata})
     return redirect("/")
 
-@app.route('/')
+@APP.route('/')
 #Render index
 def index():
     return render_template('index.html')
 
-@app.route('/db_list')
+@APP.route('/db_list')
 def db_list():
     #List db contents
     text_list = db.text.find()
