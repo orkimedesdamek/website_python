@@ -24,8 +24,8 @@ DB = CLIENT.website_data
 TEXT_ADD = DB.text
 
 @APP.route("/action", methods=['POST'])
-"""In this function text string adds to database"""
 def action():
+    """In this function text string adds to database"""
     #Adding a Text
     textdata = request.values.get("textdata")
     TEXT_ADD.insert({"text":textdata})
@@ -33,13 +33,13 @@ def action():
 
 @APP.route('/')
 #Render index
-"""Rendering main page"""
 def index():
+    """Rendering main page"""
     return render_template('index.html')
 
 @APP.route('/db_list')
-"""In this function database contents displayed on db list page"""
 def db_list():
+    """In this function database contents displayed on db list page"""
     #List db contents
     text_list = DB.text.find()
     return render_template('db_list.html', text2html=text_list, DB_STATUS_HTML=DB_STATUS)
