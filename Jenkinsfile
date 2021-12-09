@@ -21,6 +21,7 @@ pipeline {
         stage('Pylint test') {
             steps {
                 //catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
+                sh "whoami"
                 sh "pylint  ./server/server.py | tee -a ./reports/pylint_report.txt" //Pylint test
                 //}
             }
