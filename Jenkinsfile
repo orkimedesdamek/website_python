@@ -38,12 +38,12 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME = ${REGISTRY_NAME} TAG=${TAG} BUILD=${PREV_BUILD} docker-compose down --rmi all"
+                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${PREV_BUILD} docker-compose down --rmi all"
             }
         }
         stage('Compose image & container build') {
             steps {
-                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME = ${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose up  --no-start"
+                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose up  --no-start"
             }
         }
         stage('Tests'){
@@ -51,11 +51,11 @@ pipeline {
                 anyOf { branch "release_*"; branch 'feature_*' }
                 }
             steps {
-                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME = ${REGISTRY_NAME} /usr/local/bin/dockle ${REGISTRY_NAME}website_flask_server:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt" // Dockle test
-                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME = ${REGISTRY_NAME} /usr/local/bin/dockle ${REGISTRY_NAME}website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt"
+                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME=${REGISTRY_NAME} /usr/local/bin/dockle ${REGISTRY_NAME}website_flask_server:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt" // Dockle test
+                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME=${REGISTRY_NAME} /usr/local/bin/dockle ${REGISTRY_NAME}website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt"
 
-                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME = ${REGISTRY_NAME} /usr/local/bin/trivy ${REGISTRY_NAME}website_flask_server:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt" // Trivy test
-                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME = ${REGISTRY_NAME} /usr/local/bin/trivy ${REGISTRY_NAME}website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt"
+                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME=${REGISTRY_NAME} /usr/local/bin/trivy ${REGISTRY_NAME}website_flask_server:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt" // Trivy test
+                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME=${REGISTRY_NAME} /usr/local/bin/trivy ${REGISTRY_NAME}website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt"
 
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
                     sh '/usr/bin/hadolint ./server/Dockerfile | tee -a ./reports/hadolint_report.txt' // Hadolint test
