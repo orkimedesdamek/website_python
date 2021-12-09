@@ -77,11 +77,10 @@ pipeline {
         }
         stage ('PROD Push images to local registry') {
             when { 
-                anyOf { branch "master"; }
+                anyOf { branch "master"; branch "prod_test" }
                 }
             steps {
-                //Tag image, push to registry 
-                sh 'docker-compose push'
+                sh 'docker-compose push' //Push images
             }
         }
 //        stage ('PROD Pull from registry and container run') {
