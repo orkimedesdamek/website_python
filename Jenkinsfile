@@ -89,9 +89,33 @@ pipeline {
                 )
             }
         }
-        stage ('Container start') {
+        stage ('DEV Container start') {
             steps {
+                when { 
+                    anyOf { branch "release_*"; branch 'feature_*'; branch 'hotfix_*'; branch 'develop' }
+                }
                 sh 'docker-compose start'
+            }
+        }
+        stage ('PROD Tag & Push image to local registry') {
+            when { 
+                anyOf { branch "master"; }
+                }
+            steps {
+                //Tag image, push to registry 
+                sh "TAG=${TAG} BUILD=${BUILD} docker tag website_flask_server:${TAG}-${BUILD} 192.168.100.12:5000/website_srv_PROD:${TAG}"
+                sh "TAG=${TAG} BUILD=${BUILD} docker tag website_flask_mongo:${TAG}-${BUILD} 192.168.100.12:5000/website_db_PROD:${TAG}"
+                sh "TAG=${TAG} BUILD=${BUILD} docker push 192.168.100.12:5000/website_srv_PROD:${TAG}"
+                sh "TAG=${TAG} BUILD=${BUILD} docker push 192.168.100.12:5000/website_db_PROD:${TAG}"
+            }
+        }
+        stage ('PROD Pull from registry and container run') {
+            when {
+                anyOf { branch "master"; }
+                }
+            steps {
+                //Pulling images from local registry and run containers
+
             }
         }
     }
