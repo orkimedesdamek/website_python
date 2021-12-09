@@ -7,6 +7,7 @@ pipeline {
         PREV_BUILD = '${BRANCH_NAME}_B$((BUILD_NUMBER-1))'
         COMPOSE_PROJECT_NAME = 'flask_website'
         DOCKER_CONTENT_TRUST = 1
+        REGISTRY_NAME = '192.168.100.12:5000/'
 
     }
 
@@ -37,12 +38,12 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} TAG=${TAG} BUILD=${PREV_BUILD} docker-compose down --rmi all"
+                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME = ${REGISTRY_NAME} TAG=${TAG} BUILD=${PREV_BUILD} docker-compose down --rmi all"
             }
         }
         stage('Compose image & container build') {
             steps {
-                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose up  --no-start"
+                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME = ${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose up  --no-start"
             }
         }
         stage('Tests'){
@@ -50,11 +51,11 @@ pipeline {
                 anyOf { branch "release_*"; branch 'feature_*' }
                 }
             steps {
-                sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/dockle website_flask_server:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt" // Dockle test
-                sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/dockle website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt"
+                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME = ${REGISTRY_NAME} /usr/local/bin/dockle ${REGISTRY_NAME}website_flask_server:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt" // Dockle test
+                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME = ${REGISTRY_NAME} /usr/local/bin/dockle ${REGISTRY_NAME}website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt"
 
-                sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/trivy website_flask_server:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt" // Trivy test
-                sh "TAG=${TAG} BUILD=${BUILD} /usr/local/bin/trivy website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt"
+                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME = ${REGISTRY_NAME} /usr/local/bin/trivy ${REGISTRY_NAME}website_flask_server:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt" // Trivy test
+                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME = ${REGISTRY_NAME} /usr/local/bin/trivy ${REGISTRY_NAME}website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt"
 
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
                     sh '/usr/bin/hadolint ./server/Dockerfile | tee -a ./reports/hadolint_report.txt' // Hadolint test
@@ -90,10 +91,10 @@ pipeline {
             }
         }
         stage ('DEV Container start') {
-            steps {
-                when { 
-                    anyOf { branch "release_*"; branch 'feature_*'; branch 'hotfix_*'; branch 'develop' }
+            when { 
+                anyOf { branch "release_*"; branch 'feature_*'; branch 'hotfix_*'; branch 'develop' }
                 }
+            steps {
                 sh 'docker-compose start'
             }
         }
@@ -103,20 +104,16 @@ pipeline {
                 }
             steps {
                 //Tag image, push to registry 
-                sh "TAG=${TAG} BUILD=${BUILD} docker tag website_flask_server:${TAG}-${BUILD} 192.168.100.12:5000/website_srv_PROD:${TAG}"
-                sh "TAG=${TAG} BUILD=${BUILD} docker tag website_flask_mongo:${TAG}-${BUILD} 192.168.100.12:5000/website_db_PROD:${TAG}"
-                sh "TAG=${TAG} BUILD=${BUILD} docker push 192.168.100.12:5000/website_srv_PROD:${TAG}"
-                sh "TAG=${TAG} BUILD=${BUILD} docker push 192.168.100.12:5000/website_db_PROD:${TAG}"
+                sh 'docker-compose push'
             }
         }
-        stage ('PROD Pull from registry and container run') {
-            when {
-                anyOf { branch "master"; }
-                }
-            steps {
-                //Pulling images from local registry and run containers
-
-            }
-        }
-    }
+//        stage ('PROD Pull from registry and container run') {
+//            when {
+//                anyOf { branch "master"; }
+//                }
+//            steps {
+//
+//            }
+//        }
+//    }
 }
