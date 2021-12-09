@@ -80,7 +80,7 @@ pipeline {
                 anyOf { branch "master"; branch "prod_test" }
                 }
             steps {
-                sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${PREV_BUILD} docker-compose push" //Push images
+                sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
             }
         }
 //        stage ('PROD Pull from registry and container run') {
