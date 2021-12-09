@@ -12,18 +12,7 @@ pipeline {
     }
 
     stages {
-//        stage ('Develop test') {
-//            when {
-//                branch 'develop'
-//            }
-//            steps {
-//                sh 'echo $BRANCH_NAME'
-//                sh 'echo $TAG'
-//                sh "echo ${BUILD}"
-//                sh "echo ${PREV_BUILD}"
-//                sh "echo ${COMPOSE_PROJECT_NAME}"
-//            }
-//        }
+
         stage('Clone repository') {
             steps {
                 checkout scm
@@ -61,18 +50,6 @@ pipeline {
                     sh '/usr/bin/hadolint ./server/Dockerfile | tee -a ./reports/hadolint_report.txt' // Hadolint test
                     sh '/usr/bin/hadolint ./db/Dockerfile | tee -a ./reports/hadolint_report.txt'
                 }
-                //archiveArtifacts artifacts: 'reports/*.txt' //Archiving build artifacts
-
-                //publishHTML (target: [ 
-                //    allowMissing: false,
-                //    alwaysLinkToLastBuild: false,
-                //    keepAll: true,
-                //    reportDir: 'reports',
-                //    reportFiles: 'hadolint_report.txt,dockle_report.txt,trivy_report.txt,pylint_report.txt',
-                //    reportName: 'Test reports',
-                //]
-                //)
-                
             }
         }
         stage ('Archive Reports') {
@@ -98,7 +75,7 @@ pipeline {
                 sh 'docker-compose start'
             }
         }
-        stage ('PROD Tag & Push image to local registry') {
+        stage ('PROD Push images to local registry') {
             when { 
                 anyOf { branch "master"; }
                 }
