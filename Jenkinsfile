@@ -21,7 +21,6 @@ pipeline {
         stage('Pylint test') {
             steps {
                 //catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
-                sh "whoami"
                 sh "pylint  ./server/server.py | tee -a ./reports/pylint_report.txt" //Pylint test
                 //}
             }
@@ -81,6 +80,7 @@ pipeline {
                 anyOf { branch "master"; branch "prod_test" }
                 }
             steps {
+                sh "whoami"
                 sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
             }
         }
