@@ -83,7 +83,7 @@ pipeline {
             steps {
 //                withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
                 script {    
-                  docker.withRegistry('192.168.100.12:5000', 'jenkins_registry_push') {  
+                  docker.withRegistry('http://192.168.100.12:8080', 'jenkins_registry_push') {  
 //                    sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
                     sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images.
                 }
