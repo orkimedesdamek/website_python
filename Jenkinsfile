@@ -1,13 +1,6 @@
 pipeline {
     agent any
 
-    agent {
-        docker {
-            registryUrl '192.168.100.12:5000'
-            registryCredentialsId 'jenkins_registry_push'
-            }
-        }
-
     environment {
         TAG = 'v1.01'
         BUILD = '${BRANCH_NAME}_B${BUILD_NUMBER}'
@@ -88,11 +81,9 @@ pipeline {
                 anyOf { branch "master"; branch "prod_test" }
                 }
             steps {
-//                script {
-//                    docker.withRegistry('192.168.100.12:5000','jenkins_registry_push') {
+                withDockerRegistry ([credentialsId: 'jenkins_registry_push', url "http://192.168.100.12:8080/"]) {
                     sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
-//                }
-//              }
+                }
             }
         }
 //        stage ('PROD Pull from registry and container run') {
