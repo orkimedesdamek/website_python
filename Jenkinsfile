@@ -75,17 +75,22 @@ pipeline {
                 sh 'docker-compose start'
             }
         }
+    agent {
+        docker {
+            registryUrl '192.168.100.12:5000'
+            registryCredentialsId 'jenkins_registry_push'
+            }
+        }
         stage ('PROD Push images to local registry') {
             when { 
                 anyOf { branch "master"; branch "prod_test" }
                 }
             steps {
-                script {
-                    docker.withRegistry('192.168.100.12:5000','jenkins_registry_push') {
-
+//                script {
+//                    docker.withRegistry('192.168.100.12:5000','jenkins_registry_push') {
                     sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
-                }
-              }
+//                }
+//              }
             }
         }
 //        stage ('PROD Pull from registry and container run') {
