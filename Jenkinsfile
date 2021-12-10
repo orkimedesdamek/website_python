@@ -79,10 +79,12 @@ pipeline {
             when { 
                 anyOf { branch "master"; branch "prod_test" }
                 }
-            docker.withRegistry('192.168.100.12:5000','jenkins_registry_push') {
+            steps {
+                script {
+                    docker.withRegistry('192.168.100.12:5000','jenkins_registry_push') {
 
-              steps {
-                  sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
+                    sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
+                }
               }
             }
         }
