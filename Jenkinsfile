@@ -1,6 +1,13 @@
 pipeline {
     agent any
 
+    agent {
+        docker {
+            registryUrl '192.168.100.12:5000'
+            registryCredentialsId 'jenkins_registry_push'
+            }
+        }
+
     environment {
         TAG = 'v1.01'
         BUILD = '${BRANCH_NAME}_B${BUILD_NUMBER}'
@@ -75,12 +82,7 @@ pipeline {
                 sh 'docker-compose start'
             }
         }
-    agent {
-        docker {
-            registryUrl '192.168.100.12:5000'
-            registryCredentialsId 'jenkins_registry_push'
-            }
-        }
+    
         stage ('PROD Push images to local registry') {
             when { 
                 anyOf { branch "master"; branch "prod_test" }
