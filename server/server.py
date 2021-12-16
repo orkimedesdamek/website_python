@@ -15,7 +15,7 @@ APP = Flask(__name__)
 #container_name = website_mongo_TAG
 
 try:
-    CLIENT = MongoClient('db', 27017)
+    CLIENT = MongoClient("db://localhost:27017/")
     DB_STATUS = 'Connected to DB!'
 except: # pylint: disable=bare-except
     DB_STATUS = 'Failed to connect'
