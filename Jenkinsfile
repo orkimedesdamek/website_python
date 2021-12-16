@@ -67,19 +67,13 @@ pipeline {
                 )
             }
         }
-        stage ('DEV Container start') {
+        stage ('DEV Push images to registry & Deploy stack') {
             when { 
                 anyOf { branch "release_*"; branch 'feature_*'; branch 'hotfix_*'; branch 'develop' }
                 }
-            steps {
-                sh 'docker-compose start'
+            environment {
+                NODE_ID = "jkn41v9liptcqo8iymbb7aw37"
             }
-        }
-    
-        stage ('PROD Push images to local registry') {
-            when { 
-                anyOf { branch "master"; branch "prod_test" }
-                }
             steps {
 //                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
 //                script {    
@@ -88,17 +82,42 @@ pipeline {
                 withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
                     sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
+                    sh "NODE_ID=${NODE_ID} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml service_DEV"
                 }
               } 
         }
-    }
-//        stage ('PROD Pull from registry and container run') {
-//            when {
-//                anyOf { branch "master"; }
+        stage ('PROD Deploy stack') {
+            when {
+                anyOf { branch "master"; }
+                }
+            environment {
+                NODE_ID = "2s7tsu6ru4vibcsbnv235f4bo"
+            }
+            steps {
+//                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
+//                script {    
+//                  docker.withRegistry('192.168.100.12:5000', 'jenkins_registry_push') {
+//                ###
+                withCredentials ([usernamePassword( credentialsId: 'jenkins_prod_pull', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
+                    sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
+                    sh "NODE_ID=${NODE_ID} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml service_PROD"
+                }
+            }
+        }
+//        stage ('PROD Push images to local registry') {
+//            when { 
+//                anyOf { branch "master"; branch "prod_test" }
 //                }
 //            steps {
-//
-//            }
+//                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
+//                script {    
+//                  docker.withRegistry('192.168.100.12:5000', 'jenkins_registry_push') {
+//                ###
+//                withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
+//                    sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
+//                    sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
+//                }
+//              } 
 //        }
-//    }
+    }
 }   

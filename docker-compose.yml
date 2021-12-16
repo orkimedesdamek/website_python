@@ -1,11 +1,11 @@
-version: "3.5"
+version: "3.9"
 
 services:
 
   db:
  
     image: "${REGISTRY_NAME}website_flask_mongo:${TAG}-${BUILD}"
-    container_name: "website_mongo"
+#    container_name: "website_mongo"
     build: db/
     volumes:
       - mongo_dbase:/data/db
@@ -14,20 +14,29 @@ services:
       - 27017:27017
     networks:
       - backend
+    deploy:
+      placement:
+        constraints: 
+          - "node.id == ${NODE_ID}"
+
   server:
  
     image: "${REGISTRY_NAME}website_flask_server:${TAG}-${BUILD}" 
-    container_name: "website_server"
+#    container_name: "website_server"
     build: server/
     ports:
       - 1234:1234
     depends_on:
       - db
-    links:
-      - db
+#    links:
+#      - db
     networks:
       - frontend
       - backend
+    deploy:
+      placement:
+        constraints: 
+          - "node.id == ${NODE_ID}"
 
 networks:
   frontend:
