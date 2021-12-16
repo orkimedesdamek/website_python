@@ -40,10 +40,10 @@ services:
 
 networks:
   frontend:
-    driver: bridge
+#    driver: bridge
 #    name: frontend
   backend:
-    driver: bridge
+#    driver: bridge
 #    name: backend
 
 volumes:
