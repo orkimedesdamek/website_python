@@ -72,7 +72,7 @@ pipeline {
                 anyOf { branch "release_*"; branch 'feature_*'; branch 'hotfix_*'; branch 'develop' }
                 }
             environment {
-                NODE_ID = "jkn41v9liptcqo8iymbb7aw37"
+                NODE_ID = "2s7tsu6ru4vibcsbnv235f4bo"
             }
             steps {
 //                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
@@ -91,7 +91,7 @@ pipeline {
                 anyOf { branch "master"; }
                 }
             environment {
-                NODE_ID = "2s7tsu6ru4vibcsbnv235f4bo"
+                NODE_ID = "jkn41v9liptcqo8iymbb7aw37"
             }
             steps {
 //                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
