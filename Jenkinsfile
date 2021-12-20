@@ -72,7 +72,7 @@ pipeline {
                 anyOf { branch "release_*"; branch 'feature_*'; branch 'hotfix_*'; branch 'develop' }
                 }
             environment {
-                NODE_ID = "2s7tsu6ru4vibcsbnv235f4bo"
+                NODE_LABEL = "dev"
             }
             steps {
 //                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
@@ -82,8 +82,9 @@ pipeline {
                 withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
                     sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
-                    sh "NODE_ID=${NODE_ID} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack rm service_DEV"
-                    sh "NODE_ID=${NODE_ID} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml service_DEV"
+                    sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack rm service_DEV"
+                    sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml service_DEV"
+                    sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${PREV_BUILD} docker-compose down" //Delete compose containers, networks
                 }
               } 
         }
@@ -92,7 +93,7 @@ pipeline {
                 anyOf { branch "master"; }
                 }
             environment {
-                NODE_ID = "jkn41v9liptcqo8iymbb7aw37"
+                NODE_LABEL = "prod"
             }
             steps {
 //                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
@@ -101,7 +102,7 @@ pipeline {
 //                ###
                 withCredentials ([usernamePassword( credentialsId: 'jenkins_prod_pull', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
-                    sh "NODE_ID=${NODE_ID} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml service_PROD"
+                    sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml service_PROD"
                 }
             }
         }
