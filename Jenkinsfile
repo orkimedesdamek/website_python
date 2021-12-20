@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TAG = 'v1.01'
+        TAG = 'v1.02'
         BUILD = '${BRANCH_NAME}_B${BUILD_NUMBER}'
         PREV_BUILD = '${BRANCH_NAME}_B$((BUILD_NUMBER-1))'
         COMPOSE_PROJECT_NAME = 'flask_website'
