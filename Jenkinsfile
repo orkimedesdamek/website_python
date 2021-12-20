@@ -84,7 +84,7 @@ pipeline {
                     sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
                     sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack rm service_DEV"
                     sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml service_DEV"
-                    sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${PREV_BUILD} docker-compose down" //Delete compose containers, networks
+                    sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose down" //Delete compose containers, networks
                 }
               } 
         }
