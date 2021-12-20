@@ -104,7 +104,7 @@ pipeline {
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
                     sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
                     sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack rm service_PROD"
-                    sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml service_PROD"
+                    sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml --with-registry-auth service_PROD"
                     sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose down" //Delete compose containers, networks
                 }
             }
