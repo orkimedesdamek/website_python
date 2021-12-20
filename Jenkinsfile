@@ -69,7 +69,7 @@ pipeline {
         }
         stage ('DEV Push images to registry & Deploy stack') {
             when { 
-                anyOf { branch "release_*"; branch 'feature_*'; branch 'hotfix_*'; branch 'develop' }
+                anyOf { branch "release_*"; branch 'feature_*'; branch 'develop' }
                 }
             environment {
                 NODE_LABEL = "dev"
@@ -90,7 +90,7 @@ pipeline {
         }
         stage ('PROD Deploy stack') {
             when {
-                anyOf { branch "master"; }
+                anyOf { branch "master"; branch "hotfix_*" }
                 }
             environment {
                 NODE_LABEL = "prod"
@@ -102,6 +102,8 @@ pipeline {
 //                ###
                 withCredentials ([usernamePassword( credentialsId: 'jenkins_prod_pull', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
+                    sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
+                    sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack rm service_PROD"
                     sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml service_PROD"
                 }
             }
