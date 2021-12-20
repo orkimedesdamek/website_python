@@ -1,4 +1,4 @@
-Website project.
+Website project
 Simple website based on Python and Flask, uses MongoDB database, packed in Docker containers.
 Uses Docker-Compose & Swarm to deploy services.
 Git workflow is Gitflow.
