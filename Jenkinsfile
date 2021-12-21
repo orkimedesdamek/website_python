@@ -22,7 +22,7 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-                sh "docker-compose down --rmi all --remove-orphans"
+                sh 'docker image rm $(docker images "192.168.100.12:5000/website_flask_server:${TAG}-${BRANCH_NAME}")'
                 sh "docker stack rm service_DEV"
             }
         }
@@ -101,7 +101,7 @@ pipeline {
                     sh "docker-compose push" //Push images
 //                    sh "docker stack rm service_PROD"
                     sh "docker stack deploy --compose-file docker-compose.yml --with-registry-auth service_PROD"
-                    sh "docker-compose down" //Delete compose containers, networks
+//                    sh "docker-compose down" //Delete compose containers, networks
                 }
             }
         }
