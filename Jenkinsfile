@@ -27,12 +27,13 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${PREV_BUILD} docker-compose down --rmi all"
+                echo "Build is ${BUILD}"
+                sh "docker-compose down --rmi all"
             }
         }
         stage('Compose image & container build') {
             steps {
-                sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose up  --no-start"
+                sh "docker-compose up  --no-start"
             }
         }
         stage('Tests'){
@@ -40,11 +41,11 @@ pipeline {
                 anyOf { branch "release_*"; branch 'feature_*' }
                 }
             steps {
-                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME=${REGISTRY_NAME} /usr/local/bin/dockle ${REGISTRY_NAME}website_flask_server:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt" // Dockle test
-                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME=${REGISTRY_NAME} /usr/local/bin/dockle ${REGISTRY_NAME}website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt"
+                sh "/usr/local/bin/dockle ${REGISTRY_NAME}website_flask_server:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt" // Dockle test
+                sh "/usr/local/bin/dockle ${REGISTRY_NAME}website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/dockle_report.txt"
 
-                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME=${REGISTRY_NAME} /usr/local/bin/trivy ${REGISTRY_NAME}website_flask_server:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt" // Trivy test
-                sh "TAG=${TAG} BUILD=${BUILD} REGISTRY_NAME=${REGISTRY_NAME} /usr/local/bin/trivy ${REGISTRY_NAME}website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt"
+                sh "/usr/local/bin/trivy ${REGISTRY_NAME}website_flask_server:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt" // Trivy test
+                sh "/usr/local/bin/trivy ${REGISTRY_NAME}website_flask_mongo:${TAG}-${BUILD} | tee -a ./reports/trivy_report.txt"
 
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
                     sh '/usr/bin/hadolint ./server/Dockerfile | tee -a ./reports/hadolint_report.txt' // Hadolint test
@@ -81,10 +82,10 @@ pipeline {
 //                ###
                 withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
-                    sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
-                    sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack rm service_DEV"
-                    sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml service_DEV"
-                    sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose down" //Delete compose containers, networks
+                    sh "docker-compose push" //Push images
+                    sh "docker stack rm service_DEV"
+                    sh "docker stack deploy --compose-file docker-compose.yml service_DEV"
+                    sh "docker-compose down" //Delete compose containers, networks
                 }
               } 
         }
@@ -102,10 +103,10 @@ pipeline {
 //                ###
                 withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
-                    sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
-                    sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack rm service_PROD"
-                    sh "NODE_LABEL=${NODE_LABEL} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker stack deploy --compose-file docker-compose.yml --with-registry-auth service_PROD"
-                    sh "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME} REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose down" //Delete compose containers, networks
+                    sh "docker-compose push" //Push images
+                    sh "docker stack rm service_PROD"
+                    sh "docker stack deploy --compose-file docker-compose.yml --with-registry-auth service_PROD"
+                    sh "docker-compose down" //Delete compose containers, networks
                 }
             }
         }
