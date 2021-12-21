@@ -28,7 +28,7 @@ pipeline {
         }
         stage('Compose image & container build') {
             steps {
-                sh "docker-compose up --no-start"
+                sh "docker-compose build"
             }
         }
         stage('Tests'){
