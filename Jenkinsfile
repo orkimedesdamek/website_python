@@ -3,8 +3,6 @@ pipeline {
 
     environment {
         TAG = 'v1.02'
-//        BUILD = '${BRANCH_NAME}_B${BUILD_NUMBER}'
-//        PREV_BUILD = '${BRANCH_NAME}_B$((BUILD_NUMBER-1))'
         COMPOSE_PROJECT_NAME = 'flask_website'
         DOCKER_CONTENT_TRUST = 1
         REGISTRY_NAME = '192.168.100.12:5000/'
@@ -20,20 +18,17 @@ pipeline {
         }
         stage('Pylint test') {
             steps {
-                //catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
                 sh "pylint  ./server/server.py | tee -a ./reports/pylint_report.txt" //Pylint test
-                //}
             }
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-//                echo "Build is ${BUILD}"
                 sh "docker-compose down --rmi all"
             }
         }
         stage('Compose image & container build') {
             steps {
-                sh "docker-compose up  --no-start"
+                sh "docker-compose up --no-start"
             }
         }
         stage('Tests'){
