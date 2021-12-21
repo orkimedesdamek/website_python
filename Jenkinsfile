@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         TAG = 'v1.02'
-//        COMPOSE_PROJECT_NAME = 'flask_website'
+        COMPOSE_PROJECT_NAME = 'website_flask_mongo'
         DOCKER_CONTENT_TRUST = 1
         REGISTRY_NAME = '192.168.100.12:5000/'
     }
@@ -22,7 +22,8 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-                sh "docker-compose down --rmi all"
+                sh "docker-compose down --rmi all --remove-orphans"
+                sh "docker stack rm service_DEV"
             }
         }
         stage('Compose image & container build') {
@@ -77,7 +78,7 @@ pipeline {
                 withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
                     sh "docker-compose push" //Push images
-                    sh "docker stack rm service_DEV"
+//                    sh "docker stack rm service_DEV"
                     sh "docker stack deploy --compose-file docker-compose.yml service_DEV"
                     sh "docker-compose down" //Delete compose containers, networks
                 }
@@ -98,26 +99,11 @@ pipeline {
                 withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
                     sh "docker-compose push" //Push images
-                    sh "docker stack rm service_PROD"
+//                    sh "docker stack rm service_PROD"
                     sh "docker stack deploy --compose-file docker-compose.yml --with-registry-auth service_PROD"
                     sh "docker-compose down" //Delete compose containers, networks
                 }
             }
         }
-//        stage ('PROD Push images to local registry') {
-//            when { 
-//                anyOf { branch "master"; branch "prod_test" }
-//                }
-//            steps {
-//                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
-//                script {    
-//                  docker.withRegistry('192.168.100.12:5000', 'jenkins_registry_push') {
-//                ###
-//                withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
-//                    sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
-//                    sh "REGISTRY_NAME=${REGISTRY_NAME} TAG=${TAG} BUILD=${BUILD} docker-compose push" //Push images
-//                }
-//              } 
-//        }
     }
 }   
