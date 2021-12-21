@@ -3,10 +3,9 @@ pipeline {
 
     environment {
         TAG = 'v1.02'
-        COMPOSE_PROJECT_NAME = 'flask_website'
+//        COMPOSE_PROJECT_NAME = 'flask_website'
         DOCKER_CONTENT_TRUST = 1
         REGISTRY_NAME = '192.168.100.12:5000/'
-
     }
 
     stages {
