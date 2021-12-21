@@ -22,7 +22,7 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-                sh "docker image rm $(docker image ls --filter=reference=192.168.100.12:5000/*:"${TAG}"-"${BRANCH_NAME}"* -q)"
+                sh "docker image rm $(docker image ls --filter=reference=192.168.100.12:5000/*:${TAG}-${BRANCH_NAME}* -q)"
                 sh "docker stack rm service_DEV"
             }
         }
