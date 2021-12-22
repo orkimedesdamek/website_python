@@ -20,9 +20,13 @@ pipeline {
                 sh "pylint  ./server/server.py | tee -a ./reports/pylint_report.txt" //Pylint test
             }
         }
-        stage('Remove old containers, networks, images etc.') {
+        stage('Remove stack') {
             steps {
                 sh "docker stack rm service_DEV"
+            }
+        }
+        stage('Remove old images') {
+            steps {
                 sh "docker image rm -f \$(docker image ls -f=reference=${REGISTRY_NAME}*:${TAG}-${BRANCH_NAME}* -q)"
                 
             }
