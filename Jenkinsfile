@@ -23,6 +23,7 @@ pipeline {
         stage('Remove stack') {
             steps {
                 sh "docker stack rm service_DEV"
+                sh "sleep 15"
             }
         }
         stage('Remove old images') {
