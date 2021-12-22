@@ -22,7 +22,6 @@ pipeline {
         }
         stage('Remove old containers, networks, images etc.') {
             steps {
-//                sh "docker image ls -f=reference=192.168.100.12:5000/*:${TAG}-${BRANCH_NAME}* -q"
                 sh "docker stack rm service_DEV"
                 sh "docker image rm -f \$(docker image ls -f=reference=${REGISTRY_NAME}*:${TAG}-${BRANCH_NAME}* -q)"
                 
@@ -80,9 +79,7 @@ pipeline {
                 withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
                     sh "docker-compose push" //Push images
-//                    sh "docker stack rm service_DEV"
                     sh "docker stack deploy --compose-file docker-compose.yml service_DEV"
-                    sh "docker-compose down" //Delete compose containers, networks
                 }
               } 
         }
@@ -101,9 +98,7 @@ pipeline {
                 withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
                     sh "docker-compose push" //Push images
-//                    sh "docker stack rm service_PROD"
                     sh "docker stack deploy --compose-file docker-compose.yml --with-registry-auth service_PROD"
-//                    sh "docker-compose down" //Delete compose containers, networks
                 }
             }
         }

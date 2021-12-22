@@ -2,17 +2,9 @@
 """Simple website based on Flask and Pymongo"""
 import os
 from flask import Flask, render_template, request, redirect
-#import pymongo
 from pymongo import MongoClient
 
-#from dotenv import load_dotenv
-
-#load_dotenv()
-
 APP = Flask(__name__)
-
-#TAG = os.getenv('TAG')
-#container_name = website_mongo_TAG
 
 """The say it's a bad code, but why not, maybe i'll do it right way later"""
 try:
