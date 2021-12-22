@@ -14,6 +14,7 @@ APP = Flask(__name__)
 #TAG = os.getenv('TAG')
 #container_name = website_mongo_TAG
 
+"""The say it's a bad code, but why not, maybe i'll do it right way later"""
 try:
     CLIENT = MongoClient("mongodb://db:27017/")
     DB_STATUS = 'Connected to DB!'
