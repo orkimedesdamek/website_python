@@ -23,7 +23,7 @@ pipeline {
         stage('Remove stack') {
             steps {
                 sh "docker stack rm service_DEV"
-                sh "sleep 10"
+                sh "sleep 10" //Need to replace this with waitUntil checking for stack containers delete
             }
         }
         stage('Remove old images') {
