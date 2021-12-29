@@ -28,8 +28,9 @@ pipeline {
         }
         stage('Remove old images') {
             steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
                 sh "docker image rm -f \$(docker image ls -f=reference=${REGISTRY_NAME}*:${TAG}-${BRANCH_NAME}* -q)"
-                
+                }
             }
         }
         stage('Compose image build') {
