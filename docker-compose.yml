@@ -15,9 +15,30 @@ services:
     networks:
       - backend
     deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
       placement:
+        max_replicas_per_node: 1
         constraints: 
           - "node.labels.type == ${NODE_LABEL}"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 60s
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: pause
+        order: stop-first
+
 
   server:
  
@@ -34,9 +55,30 @@ services:
       - frontend
       - backend
     deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
       placement:
+        max_replicas_per_node: 1
         constraints: 
           - "node.labels.type == ${NODE_LABEL}"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 60s
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: pause
+        order: stop-first
+
 
 networks:
   frontend:
