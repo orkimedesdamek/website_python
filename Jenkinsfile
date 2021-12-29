@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TAG = 'v1.02'
+        TAG = 'v1.03'
         COMPOSE_PROJECT_NAME = 'website_flask_mongo'
         DOCKER_CONTENT_TRUST = 1
         REGISTRY_NAME = '192.168.100.12:5000/'
