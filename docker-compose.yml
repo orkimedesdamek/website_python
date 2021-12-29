@@ -11,7 +11,11 @@ services:
       - mongo_dbase:/data/db
       - config_mongo_dbase:/data/configdb
     ports: 
-      - 27017:27017
+       - target: 27017
+         published: 27017
+         protocol: tcp
+         mode: host
+#      - 27017:27017
     networks:
       - backend
     deploy:
@@ -46,7 +50,11 @@ services:
 #    container_name: "website_server"
     build: server/
     ports:
-      - 1234:1234
+       - target: 1234
+         published: 1234
+         protocol: tcp
+         mode: host
+#      - 1234:1234
     depends_on:
       - db
 #    links:
