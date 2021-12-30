@@ -101,9 +101,6 @@ pipeline {
 //            when {
 //                anyOf { branch "master"; branch "hotfix_*" }
 //                }
-            environment {
-                NODE_LABEL = "prod"
-            }
             steps {
                 script {
                     if (env.BRANCH_NAME == 'master') {
