@@ -85,7 +85,7 @@ pipeline {
                 NODE_LABEL = "${NODE_LABEL}"
             }
             steps {
-//                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
+//                ###This construction is better than passing USER PASSWORD to docker login, but did'nt work with insecure registries
 //                script {    
 //                  docker.withRegistry('192.168.100.12:5000', 'jenkins_registry_push') {
 //                ###
