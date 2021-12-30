@@ -104,7 +104,7 @@ pipeline {
 //                anyOf { branch "master"; branch "hotfix_*" }
 //                }
             environment {
-                NODE_LABEL = '${NODE_LABEL}'
+                NODE_LABEL = "${NODE_LABEL}"
             }
             steps {
 //               script {
