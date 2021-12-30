@@ -25,9 +25,11 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == 'master') {
                         SERVICE_NAME = 'service_PROD'
+                        NODE_LABEL = "prod"
                     }
                     else {
                         SERVICE_NAME = 'service_DEV'
+                        NODE_LABEL = "dev"
                     }
                 }
                 sh "docker stack rm ${SERVICE_NAME}"
@@ -101,15 +103,18 @@ pipeline {
 //            when {
 //                anyOf { branch "master"; branch "hotfix_*" }
 //                }
+            environment {
+                NODE_LABEL = '${NODE_LABEL}'
+            }
             steps {
-                script {
-                    if (env.BRANCH_NAME == 'master') {
-                        NODE_LABEL = "prod"
-                    }
-                    else {
-                        NODE_LABEL = "dev"
-                    }
-                }
+//               script {
+//                   if (env.BRANCH_NAME == 'master') {
+//                       NODE_LABEL = "prod"
+//                   }
+//                   else {
+//                       NODE_LABEL = "dev"
+//                   }
+//              }
                 echo "Service name is ${SERVICE_NAME}"
                 echo "Node labes is ${NODE_LABEL}"
 //                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
