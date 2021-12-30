@@ -22,7 +22,15 @@ pipeline {
         }
         stage('Remove stack') {
             steps {
-                sh "docker stack rm service_DEV"
+                script {
+                    if (env.BRANCH_NAME == 'master') {
+                        SERVICE_NAME = 'service_PROD'
+                    }
+                    else {
+                        SERVICE_NAME = 'service_DEV'
+                    }
+                }
+                sh "docker stack rm ${SERVICE_NAME}"
                 sh "sleep 10" //Need to replace this with waitUntil checking for stack containers delete
             }
         }
@@ -70,33 +78,43 @@ pipeline {
                 )
             }
         }
-        stage ('DEV Push images to registry & Deploy stack') {
-            when { 
-                anyOf { branch "release_*"; branch 'feature_*'; branch 'develop' }
-                }
-            environment {
-                NODE_LABEL = "dev"
-            }
-            steps {
-//                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
-//                script {    
-//                  docker.withRegistry('192.168.100.12:5000', 'jenkins_registry_push') {
-//                ###
-                withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
-                    sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
-                    sh "docker-compose push" //Push images
-                    sh "docker stack deploy --compose-file docker-compose.yml service_DEV"
-                }
-              } 
-        }
-        stage ('PROD Deploy stack') {
-            when {
-                anyOf { branch "master"; branch "hotfix_*" }
-                }
+//        stage ('DEV Push images to registry & Deploy stack') {
+//            when { 
+//                anyOf { branch "release_*"; branch 'feature_*'; branch 'develop' }
+//                }
+//            environment {
+//                NODE_LABEL = "dev"
+//            }
+//            steps {
+////                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
+////                script {    
+////                  docker.withRegistry('192.168.100.12:5000', 'jenkins_registry_push') {
+////                ###
+//                withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
+//                    sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
+//                    sh "docker-compose push" //Push images
+//                    sh "docker stack deploy --compose-file docker-compose.yml service_DEV"
+//                }
+//              } 
+//        }
+        stage ('Deploy stack') {
+//            when {
+//                anyOf { branch "master"; branch "hotfix_*" }
+//                }
             environment {
                 NODE_LABEL = "prod"
             }
             steps {
+                script {
+                    if (env.BRANCH_NAME == 'master') {
+                        NODE_LABEL = "prod"
+                    }
+                    else {
+                        NODE_LABEL = "dev"
+                    }
+                }
+                echo "Service name is ${SERVICE_NAME}"
+                echo "Node labes is ${NODE_LABEL}"
 //                ###This construction is better then passing USER PASSWORD to docker login, but didnt work with insecure registries
 //                script {    
 //                  docker.withRegistry('192.168.100.12:5000', 'jenkins_registry_push') {
@@ -104,7 +122,7 @@ pipeline {
                 withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
                     sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
                     sh "docker-compose push" //Push images
-                    sh "docker stack deploy --compose-file docker-compose.yml --with-registry-auth service_PROD"
+                    sh "docker stack deploy --compose-file docker-compose.yml --with-registry-auth ${SERVICE_NAME}"
                 }
             }
         }
