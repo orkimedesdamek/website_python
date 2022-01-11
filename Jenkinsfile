@@ -95,7 +95,7 @@ pipeline {
 //                    sh "docker stack deploy --compose-file docker-compose.yml --with-registry-auth ${SERVICE_NAME}"
 //                }
             sh "docker-compose push" //Push images
-            sh "docker stack deploy --compose-file docker-compose.yml"
+            sh "docker stack deploy --compose-file docker-compose.yml ${SERVICE_NAME}"
             }
         }
     }
