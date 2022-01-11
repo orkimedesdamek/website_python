@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        TAG = 'v1.03'
+        TAG = 'v1.04'
         COMPOSE_PROJECT_NAME = 'website_flask_mongo'
         DOCKER_CONTENT_TRUST = 1
-        REGISTRY_NAME = '192.168.100.12:5000/'
+        REGISTRY_NAME = '172.16.64.30:5000/'
     }
 
     stages {
@@ -84,17 +84,19 @@ pipeline {
             environment {
                 NODE_LABEL = "${NODE_LABEL}"
             }
-            steps {
+//            steps {
 //                ###This construction is better than passing USER PASSWORD to docker login, but did'nt work with insecure registries
 //                script {    
 //                  docker.withRegistry('192.168.100.12:5000', 'jenkins_registry_push') {
 //                ###
-                withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
-                    sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
-                    sh "docker-compose push" //Push images
-                    sh "docker stack deploy --compose-file docker-compose.yml --with-registry-auth ${SERVICE_NAME}"
-                }
-            }
+//                withCredentials ([usernamePassword( credentialsId: 'jenkins_registry_push', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {    
+//                    sh "docker login -u $USER -p $PASSWORD 192.168.100.12:5000"
+//                    sh "docker-compose push" //Push images
+//                    sh "docker stack deploy --compose-file docker-compose.yml --with-registry-auth ${SERVICE_NAME}"
+//                }
+//            }
+            sh "docker-compose push" //Push images
+            sh "docker stack deploy --compose-file docker-compose.yml"
         }
     }
 }   
