@@ -84,7 +84,7 @@ pipeline {
             environment {
                 NODE_LABEL = "${NODE_LABEL}"
             }
-//            steps {
+            steps {
 //                ###This construction is better than passing USER PASSWORD to docker login, but did'nt work with insecure registries
 //                script {    
 //                  docker.withRegistry('192.168.100.12:5000', 'jenkins_registry_push') {
@@ -94,9 +94,9 @@ pipeline {
 //                    sh "docker-compose push" //Push images
 //                    sh "docker stack deploy --compose-file docker-compose.yml --with-registry-auth ${SERVICE_NAME}"
 //                }
-//            }
             sh "docker-compose push" //Push images
             sh "docker stack deploy --compose-file docker-compose.yml"
+            }
         }
     }
 }   
