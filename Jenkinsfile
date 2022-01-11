@@ -59,10 +59,10 @@ pipeline {
                 sh "/usr/local/bin/trivy ${REGISTRY_NAME}website_flask_server:${TAG}-${BRANCH_NAME}-${BUILD_NUMBER}| tee -a ./reports/trivy_report.txt" // Trivy test
                 sh "/usr/local/bin/trivy ${REGISTRY_NAME}website_flask_mongo:${TAG}-${BRANCH_NAME}-${BUILD_NUMBER} | tee -a ./reports/trivy_report.txt"
 
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
-                    sh '/usr/bin/hadolint ./server/Dockerfile | tee -a ./reports/hadolint_report.txt' // Hadolint test
-                    sh '/usr/bin/hadolint ./db/Dockerfile | tee -a ./reports/hadolint_report.txt'
-                }
+//                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
+//                    sh '/usr/bin/hadolint ./server/Dockerfile | tee -a ./reports/hadolint_report.txt' // Hadolint test
+//                    sh '/usr/bin/hadolint ./db/Dockerfile | tee -a ./reports/hadolint_report.txt'
+//                }
             }
         }
         stage ('Archive Reports') {
