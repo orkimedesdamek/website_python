@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Pylint test') {
             steps {
-                sh "pylint  ./server/server.py | tee -a ./reports/pylint_report.txt" //Pylint test
+                sh "pylint  ./server/server.py --reports=yes | tee -a ./reports/pylint_report.txt" //Pylint test
             }
         }
         stage('Remove stack') {
