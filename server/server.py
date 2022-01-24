@@ -6,7 +6,7 @@ from pymongo import MongoClient
 
 APP = Flask(__name__)
 
-"""The say it's a bad code, but why not, maybe i'll do it right way later"""
+"""They say it's a bad code, but why not, maybe i'll do it right way later"""
 try:
     CLIENT = MongoClient("mongodb://db:27017/")
     DB_STATUS = 'Connected to DB!'
