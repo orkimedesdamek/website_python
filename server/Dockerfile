@@ -1,5 +1,5 @@
 FROM python:alpine
-RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install -r requirements.txt
 RUN set -ex && \
     addgroup -S web && \
     adduser -S web -G web
