@@ -4,10 +4,10 @@ RUN set -ex && \
     adduser -S web -G web
 COPY . /app
 WORKDIR /app
+USER web
 RUN set -ex && \
     pip install --upgrade pip && \
     pip install -r requirements.txt
-USER web
 HEALTHCHECK NONE
 ENTRYPOINT ["python"]
 CMD ["server.py"]
