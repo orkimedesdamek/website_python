@@ -1,8 +1,10 @@
 FROM python:alpine
-RUN addgroup -S web && adduser -S web -G web
+RUN pip install -r requirements.txt --no-cache-dir
+RUN set -ex && \
+    addgroup -S web && \
+    adduser -S web -G web
 COPY . /app
 WORKDIR /app
-RUN pip install -r requirements.txt
 USER web
 HEALTHCHECK NONE
 ENTRYPOINT ["python"]
