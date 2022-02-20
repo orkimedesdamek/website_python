@@ -5,7 +5,7 @@ RUN set -ex && \
 COPY . /app
 WORKDIR /app
 RUN set -ex && \
-    pip update && \
+    pip install --upgrade pip && \
     pip install -r requirements.txt
 USER web
 HEALTHCHECK NONE
